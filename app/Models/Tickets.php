@@ -12,12 +12,12 @@ class Tickets extends Model
 
     protected $table = 'tickets';
     protected $hidden = [
-        'ticket_unique_id',
+        'hash',
     ];
     protected $fillable = [
         'showtime_id',
         'seat_places',
-        'ticket_unique_id',
+        'hash',
         'cost',
         'start_date',
     ];

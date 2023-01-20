@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->integer('showtime_id');
+            $table->foreign('showtime_id')->references('id')->on('show_times');
             $table->json('seat_places')->nullable();
             $table->integer('cost')->default(0);
-            $table->string('ticket_unique_id');
+            $table->string('hash');
             $table->date('start_date');
             $table->timestamps();
         });

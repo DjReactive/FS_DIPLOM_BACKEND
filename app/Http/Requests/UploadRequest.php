@@ -28,7 +28,7 @@ class UploadRequest extends FormRequest
         return [
             'file' => [
                 'required',
-                File::types(['png', 'jpg'])
+                File::types(['png', 'jpg', 'jpeg'])
                     ->max(5 * 1024),
             ]
         ];

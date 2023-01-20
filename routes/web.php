@@ -13,10 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return ['Laravel' => app()->version()];
+Route::match(['get', 'post'], '/', function () {
+    return 'Not Found';
 });
-
-Route::post('upload', App\Http\Controllers\UploadController::class)->name('upload');
 
 require __DIR__.'/auth.php';

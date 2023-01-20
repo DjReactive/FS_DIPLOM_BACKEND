@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('seats_on_row')->default(10);
             $table->integer('price')->default(100);
             $table->integer('vip_price')->default(150);
-            $table->string('seats_table')->default('[]');
+            $table->string('seats_table')->nullable();
             $table->boolean('is_available')->default(true);
             $table->timestamps();
         });

@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
-            $table->string('country');
+            $table->integer('image_id')->nullable();
+            $table->foreign('image_id')->references('id')->on('media');
+            $table->string('description')->nullable();
+            $table->string('country')->nullable();
             $table->integer('duration')->default(0);
-            $table->string('image')->default('/image/i.jpg');
             $table->timestamps();
         });
     }

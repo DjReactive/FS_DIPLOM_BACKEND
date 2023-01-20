@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadRequest;
@@ -11,31 +11,37 @@ class UploadController extends Controller
 {
     public function __invoke(UploadRequest $request)
     {
-        return 1;
+
+        if (!$request->file('file')) {
+            return response()->json([
+                'message' => 'You not uploaded file'
+            ], 400);
+        }
         $file = $request->file('file');
+
+        $path = "app" . DIRECTORY_SEPARATOR . "images";
         $name = $file->hashName();
+        $dateFolder = DIRECTORY_SEPARATOR . date("d") . date("m") . date("Y");
 
-        $upload = Storage::put("images/{$name}", $file);
-
+        Storage::put("images". $dateFolder, $file);
         Media::query()->create(
             attributes: [
-                'name' => "{$name}",
+                'name' => $name,
                 'file_name' => $file->getClientOriginalName(),
                 'mime_type' => $file->getClientMimeType(),
-                'path' => "images/{$name}"
-                ,
-                'disk' => config('app.uploads.disk'),
+                'path' => $path . $dateFolder . DIRECTORY_SEPARATOR . $name,
+//                'disk' => config('app.uploads.disk'),
                 'file_hash' => hash_file(
-                    config('app.uploads.hash'),
+                    'md5',
                     storage_path(
-                        path: "images/{$name}",
+                        path: $path . $dateFolder . DIRECTORY_SEPARATOR . $name,
                     ),
                 ),
                 'collection' => $request->get('collection'),
                 'size' => $file->getSize(),
             ],
         );
-        return "hello!";
+        return $name;
         //return redirect()->back();
     }
 }

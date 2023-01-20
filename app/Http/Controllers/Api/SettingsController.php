@@ -4,38 +4,28 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Settings;
+use App\Repositories\Interfaces\SettingsRepositoryInterface;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
+    public function __construct(SettingsRepositoryInterface $settingsRepository)
+    {
+        $this->settingsRepository = $settingsRepository;
+    }
+
     public function index()
     {
-        return response()->json([
-            'data' => Settings::all()
-        ], 200);
+        return $this->settingsRepository->all();
     }
 
     public function access()
     {
-        return response()->json([
-            'data' => Settings::query()
-                ->where('option_access', 0)
-                ->get()
-        ], 200);
+        return $this->settingsRepository->access();
     }
 
-    public function update(Request $request, $option)
+    public function update(Request $request, string $option)
     {
-        $sett = Settings::query()->where('option_name', $option)->first();
-        if (!$sett) {
-            return Settings::create([
-                'option_name' => $option,
-                'option_value' => $request['value'],
-                'option_access' => $request['access'] || 3,
-            ]);
-        }
-        return $sett->update([
-            'option_value' => $request['value'],
-        ]);
+        return $this->settingsRepository->update($request, $option);
     }
 }

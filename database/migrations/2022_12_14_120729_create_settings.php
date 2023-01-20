@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('option_name')->unique();
-            $table->text('option_value')->default('0');
+            $table->text('option_value')->nullable();
             $table->integer('option_access')->default(0);
             $table->timestamps();
         });

@@ -19,14 +19,14 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-   Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
-   Route::post('/me', [\App\Http\Controllers\Api\AuthController::class, 'me']);
+    Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
+    Route::post('/me', [\App\Http\Controllers\Api\AuthController::class, 'me']);
+    Route::post('/upload', \App\Http\Controllers\Api\UploadController::class);
 
-   Route::apiResource('hall', \App\Http\Controllers\Api\HallController::class);
-   Route::apiResource('movie', \App\Http\Controllers\Api\MoviesController::class);
-   Route::apiResource('showtime', \App\Http\Controllers\Api\ShowTimeController::class);
-   Route::apiResource('settings', \App\Http\Controllers\Api\SettingsController::class);
-
+    Route::apiResource('hall', \App\Http\Controllers\Api\HallController::class);
+    Route::apiResource('movie', \App\Http\Controllers\Api\MoviesController::class);
+    Route::apiResource('showtime', \App\Http\Controllers\Api\ShowTimeController::class);
+    Route::apiResource('settings', \App\Http\Controllers\Api\SettingsController::class);
 });
 
 Route::apiResource('tickets', \App\Http\Controllers\Api\TicketsController::class);
@@ -41,3 +41,6 @@ Route::get('settings', [\App\Http\Controllers\Api\SettingsController::class, 'ac
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
 Route::post('/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
 
+Route::match(['get', 'post'], '/', function () {
+    return 'Not Found';
+});

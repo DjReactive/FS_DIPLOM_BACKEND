@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowTimeRequest;
-use App\Models\Hall;
-use App\Models\Movies;
-use App\Models\ShowTimes;
+use App\Repositories\Interfaces\ShowTimeRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ShowTimeController extends Controller
 {
+    public function __construct(ShowTimeRepositoryInterface $showTimeRepository)
+    {
+        $this->showTimeRepository = $showTimeRepository;
+    }
+
     public function index()
     {
-         return response()->json([
-            'data' => ShowTimes::all()
-        ], 200);
+         return $this->showTimeRepository->all();
     }
 
     public function create(ShowTimeRequest $request) {
@@ -24,31 +25,21 @@ class ShowTimeController extends Controller
 
     public function store(ShowTimeRequest $request)
     {
-        $movie = Movies::where('id', $request['movie_id'])->firstOrFail();
-        $hall = Hall::where('id', $request['hall_id'])->firstOrFail();
-        if (!$movie || !$hall) {
-            return response()->json([
-                'message' => 'Your request invalid'
-            ], 400);
-        }
-        return ShowTimes::create($request->validated());
+        return $this->showTimeRepository->create($request);
     }
 
     public function show($id)
     {
-        return ShowTimes::findOrFail($id);
+        return $this->showTimeRepository->getById($id);
     }
 
     public function update(Request $request, $id)
     {
-        return ShowTimes::where('id', $id)
-            ->update($request->only(
-                ['seats_table', 'seats_on_row', 'rows', 'name', 'price', 'vip_price', 'is_available']
-            ));
+        return $this->showTimeRepository->update($request, $id);
     }
 
     public function destroy($id)
     {
-        return ShowTimes::destroy($id);
+        return $this->showTimeRepository->destroy($id);
     }
 }

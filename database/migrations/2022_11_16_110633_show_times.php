@@ -15,9 +15,12 @@ return new class extends Migration
     {
         Schema::create('show_times', function (Blueprint $table) {
             $table->id();
-            $table->integer('hall_id');
-            $table->integer('movie_id');
+            $table->integer('hall_id')->unsigned();
+            $table->foreign('hall_id')->references('id')->on('halls');
+            $table->integer('movie_id')->unsigned();
+            $table->foreign('movie_id')->references('id')->on('movies');
             $table->time('start_time');
+            $table->index(['id', 'start_time']);
             $table->timestamps();
         });
     }
